@@ -1,0 +1,209 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<h3>TODO</h3>\n",
+    "<p>Aquí nos encargamos de 2 cosas:</p>\n",
+    "<ol>\n",
+    "<li>Extraer los coeficientes del modelo (<b style='color:red;'>TODO</b>):\n",
+    "    <p>Se usará un refinamiento iterativo, en donde:</p>\n",
+    "        <ol>\n",
+    "            <li>Se parten de todos los coeficientes en 1</li>\n",
+    "            <li>Para cada columna i, se intentará seccionarlo en Xi partes\n",
+    "                <p>Por ejemplo, para distancias: de a 100 metros, de a 1 km, etc</p>\n",
+    "            </li>\n",
+    "            <li>Para cada sección Xi, de valor Vi, corresponde un coeficiente medio Ci, calculado de tomar el global y aislado de los demás coeficientes. En caso de no poseer ese dato, el registro no se toma en cuenta\n",
+    "                <p>Ejemplo:</p>\n",
+    "                    <ol>\n",
+    "                        <li>Sean las columnas C1, V1: (0, 10); C2, V2: (0, 10); C3, V3: (0, 1)</li>\n",
+    "                        <li>Para cada registro, se toma el coef global, se lo divide por el (C1;V1) y (C2;V2) correspondiente</li>\n",
+    "                        <li>Se reparten en los #V3 valores distintos y se toma el Cmedio de cada uno como los valores de C3</li>\n",
+    "                    </ol>\n",
+    "            </li>\n",
+    "            <li>Para calcular, se extrapolan los puntos de sección (Vi, Ci), de acuerdo al significado de la columna:\n",
+    "                <p>Si se trata de un valor binario, será valor V1 en ausencia y V2 en presencia</p>\n",
+    "                <p>Si se trata de valores discretos, podría ser una recta o una colección de puntos (valor, coef)</p>\n",
+    "                <p>Si se trata de una distancia, puede ser una recta, una cuadrática, exponencial, etc</p>\n",
+    "            </li>\n",
+    "        </ol>\n",
+    "</li>\n",
+    "<li><a href='#CalculoPromedioPrecioUnitario'><b>Generar</b></a> la base de datos para calcular por regresión el promedio del precio unitario por barrio en el tiempo (<b style='color:green;'>OK</b>)</li>\n",
+    "</ol>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# No vamos a graficar, de momento\n",
+    "#%matplotlib inline\n",
+    "\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "#import matplotlib.pyplot as plt\n",
+    "from os import listdir"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<p>Levantar DataFrame</p>\n",
+    "<a name='LevantarDataFrame'/>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def LeerDataFrame(nombreArchivo):\n",
+    "    \"\"\"Función que lee un archivo y devuelve un dataframe\"\"\"\n",
+    "    return pd.read_csv(nombreArchivo, low_memory = False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "gDataFrameGlobal = pd.DataFrame()\n",
+    "gBarriosPrecioUnitario = pd.DataFrame()\n",
+    "gCoeficientes = [{'nombre': 'Cochera', 'metodo': 1, 'coeficiente': 1}]\n",
+    "\n",
+    "gMetodos = [lambda x, y: y if x else 1]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def CalcularCoeficienteGlobal(precioUnitario, precioPromedioBarrio):\n",
+    "    \"\"\"Calcula el coeficiente global\"\"\"\n",
+    "    if precioPromedioBarrio is None:\n",
+    "        return 1;\n",
+    "\n",
+    "    if precioPromedioBarrio < 1:\n",
+    "        return 1;\n",
+    "\n",
+    "    return (float(precioUnitario) / precioPromedioBarrio);\n",
+    "\n",
+    "def CalcularCoeficiente(valor, coeficiente):\n",
+    "    \"\"\"Calcula un coeficiente\"\"\"\n",
+    "    if valor is None:\n",
+    "        return 1\n",
+    "    return gMetodos[coeficiente['metodo']](valor, coeficiente['coeficiente'])\n",
+    "\n",
+    "def CalcularSerieCoeficiente(dataFrame, coeficiente):\n",
+    "    \"\"\"Calcula una serie de coeficientes\"\"\"\n",
+    "    return dataFrame[coeficiente['nombre']].map(lambda x: CalcularCoeficiente(x, coeficiente))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "def LeerTodosLosDataFrame(rutaCarpeta):\n",
+    "    \"\"\"Lee todos los dataFrame y los concatena en uno solo\"\"\"\n",
+    "    granDataFrame = pd.DataFrame()\n",
+    "    for archive in listdir(rutaCarpeta):\n",
+    "        if \".csv\" in archive:\n",
+    "            print(archive)\n",
+    "            df = pd.read_csv(rutaCarpeta + archive, low_memory = False)\n",
+    "            granDataFrame = granDataFrame.append(df, ignore_index = True)\n",
+    "    return granDataFrame"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import time\n",
+    "start = time.time()\n",
+    "gDataFrameGlobal = LeerTodosLosDataFrame('./processed/')\n",
+    "end = time.time()\n",
+    "totalTime = end - start\n",
+    "print('Time used: ' + str(totalTime))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<h3>DataFrame de precios promedios unitarios de los barrios en el tiempo</h3>\n",
+    "<a name = 'CalculoPromedioPrecioUnitario'/>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def CalcularPromedioPrecioUnitario(dataFrame):\n",
+    "    \"\"\"Genera el dataframe con los precios promedios unitarios de los barrios en el tiempo\"\"\"\n",
+    "    barriosPromedios = dataFrame.groupby(by=['state_name', 'barrio', 'property_type', 'dump_date_year', 'dump_date_month'])['price_usd_per_m2'].mean()\n",
+    "    return barriosPromedios.reset_index(name = 'precio_unitario_promedio')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "CalcularPromedioPrecioUnitario(gDataFrameGlobal).head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.2rc1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

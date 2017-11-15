@@ -7,7 +7,6 @@ true = 1
 # ------------------------------------------------------------------------------
 # pre: Recibe una lista de claves
 # pos: devuelve un diccionario de esas claves recibidas inicializadas en cero
-
 def inicializar_diccionario(keys):
     dicc = {}
     for charac in keys:
@@ -24,7 +23,6 @@ def inicializar_diccionario(keys):
 # vector "phrases", el offset el cual debe desplazarse la posicion de lectura
 # del vector "words" y el indice en donde se encuantrala frase encontrada en el
 # vector "phrases"
-
 def encontrar_frase(words, i, phrases):
     offset = 0
     index = 0
@@ -46,7 +44,6 @@ def encontrar_frase(words, i, phrases):
 # ------------------------------------------------------------------------------
 # pre: Recibe un dataframe
 # pos: Devuelve una lista de diccionarios
-
 def crear_diccionario_descripcion(df):
     characteristics = [
         "living",
@@ -62,27 +59,31 @@ def crear_diccionario_descripcion(df):
         "futbol 5",
         "seguridad las 24 hs"
     ]
-
-    size = df['description'].size
+    size = len(df.index)
     dicc_list = []
     for i in range(0, size):
         dicc = inicializar_diccionario(characteristics + phrases)
-        if type(df['description'][i]) != type(""):
+        if 'description' not in df:
             dicc_list.append(dicc)
             continue
-        words = df['description'][i].split()
+        description = list(df['description'])
+        if type(description[i]) != type(""):
+            dicc_list.append(dicc)
+            continue
+        words = description[i].split()
         lenght = len(words)
         for j in range(0, lenght):
             (wordBelongs, offset, index) = encontrar_frase(words, j, phrases)
             if wordBelongs:
                 j += offset
                 if j >= lenght:
-                    return dicc_list
+                    break
                 dicc[phrases[index]] = true
             if words[j].lower() in characteristics:
-                dicc[words[j]] = true
+                dicc[words[j].lower()] = true
         dicc_list.append(dicc)
     return dicc_list
+
 
 # ------------------------------------------------------------------------------
 #

@@ -1,4 +1,5 @@
 import pandas as pd
+from os import listdir
 
 #Dataframes
 def LeerDataFrame(nombreArchivo):
@@ -7,7 +8,15 @@ def LeerDataFrame(nombreArchivo):
 
 def ConcatenarDataFrames(listaDataFrames):
 	"""Concatena una lista de dataframes"""
-	return pd.Dataframe.concat(listaDataFrames)
+	return pd.concat(listaDataFrames)
+
+def LeerCarpetaDataFrames(rutaCarpeta):
+	listaDataFrames = []
+	for archive in listdir(rutaCarpeta):
+		if ".csv" in archive:
+			df = LeerDataFrame(rutaCarpeta + archive)
+			listaDataFrames.append(df)
+	return ConcatenarDataFrames(listaDataFrames)
 
 #Columnas
 def AgregarColumna(dataFrame, nombreColumna, columna):

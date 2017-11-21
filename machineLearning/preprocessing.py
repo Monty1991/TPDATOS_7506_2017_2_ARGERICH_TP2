@@ -1,5 +1,7 @@
 import pandas as pd
 from .dataFrameUtils import *
+from .filtering import *
+from .descriptionExpansion import Parsear_Descripcion, Inicializar_Diccionario, gClaves
 from os import listdir
 
 #PrimeraExpansion
@@ -27,19 +29,12 @@ def PrimeraExpansion(dataFrame, archivo):
 	if 'surface_in_m2' in dataFrame:
 		RenombrarColumna(dataFrame, 'surface_in_m2', 'surface_total_in_m2')
 
-#Filtrado
-def CalcularDiferencia(dataFrame):
-	return (dataFrame['dump_date_year'] - dataFrame['created_on_year']) * 12 \
-		+ (dataFrame['dump_date_month'] - dataFrame['created_on_month'])
-
 def Filtrar(dataFrame, listaPaises, listaProvincias):
-	dataFrame = dataFrame[FiltrarColumna(dataFrame['country_name'], listaPaises)]
-	dataFrame = dataFrame[FiltrarColumna(dataFrame['state_name'], listaProvincias)]
-	dataFrame = dataFrame[CalcularDiferencia(dataFrame) < 18]
-	if 'price_usd_per_m2' in dataFrame:
-		dataFrame = dataFrame[~dataFrame['price_usd_per_m2'].isnull()]
-	"""Cuando el barrio es nulo. Sin embargo, usar dataFrame[~dataFrame['barrio'].isnull()] no funciona!!"""
-	dataFrame = dataFrame[dataFrame['place_name'] != dataFrame['state_name']]
+	dataFrame = FiltrarPais(dataFrame, listaPaises)
+	dataFrame = FiltrarProvincia(dataFrame, listaProvincias)
+	dataFrame = FiltrarBarrioNulo(dataFrame)
+	dataFrame = FiltrarDiferenciaTemporal(dataFrame, 18)
+	dataFrame = FiltrarPrecioUnitario(dataFrame)
 	return dataFrame
 
 #PrimeraLimpieza
@@ -81,15 +76,25 @@ def ControlarConsistenciaPrecio(dataFrame):
 		if ('price_per_m2' in dataFrame) and ('price' in dataFrame):
 			dataFrame['price_usd_per_m2'] = dataFrame[['price', 'surface_total_in_m2', 'price_usd_per_m2']].apply(lambda x: ControlarPrecioUnitario(x[0], x[1], x[2]), axis = 1)
 
+def ExpandirDescripcion(dataFrame):
+	if 'description' in dataFrame:
+		columnaDescription = [Parsear_Descripcion(value) for value in dataFrame['description']]
+	else:
+		columnaDescription = [Inicializar_Diccionario(gClaves) for i in range(0, len(dataFrame.index))]
+
+	for k in gClaves:
+		dataFrame[k] = pd.Series([diccionario[k] for diccionario in columnaDescription], index = dataFrame.index)
+
 def SegundaExpansion(dataFrame):
-	"""TODO: completar con los cruces de dataframes, como los cálculos de distancias, y expandir la descripción"""
+	"""TODO: completar con los cruces de dataframes, como los cálculos de distancias, y expandir la descripcion"""
+
+	ExpandirDescripcion(dataFrame)
 	return 2
 
 def SegundaLimpieza(dataFrame):
 	SacarListaColumnas(dataFrame, ['title', 'description', 'lat', 'lon'])
 
-def PreprocesarArchivo(rutaArchivo, nombreArchivo, listaPaises, listaProvincias):
-	dataFrame = LeerDataFrame(rutaArchivo)
+def PreprocesarDataFrame(dataFrame, nombreArchivo, listaPaises, listaProvincias):
 	PrimeraExpansion(dataFrame, nombreArchivo)
 	dataFrame = Filtrar(dataFrame, listaPaises, listaProvincias)
 	LimpiarDataFrame(dataFrame)
@@ -97,6 +102,10 @@ def PreprocesarArchivo(rutaArchivo, nombreArchivo, listaPaises, listaProvincias)
 	SegundaExpansion(dataFrame)
 	SegundaLimpieza(dataFrame)
 	return dataFrame
+
+def PreprocesarArchivo(rutaArchivo, nombreArchivo, listaPaises, listaProvincias):
+	dataFrame = LeerDataFrame(rutaArchivo)
+	return PreprocesarDataFrame(dataFrame, nombreArchivo, listaPaises, listaProvincias)
 
 def PreprocesarCarpeta(rutaCarpetaOrigen, rutaCarpetaDestino, listaPaises, listaProvincias):
 	"""Lee los archivos en rutaCarpetaOrigen, los preprocesa y guarda en rutaCarpetaDestino"""

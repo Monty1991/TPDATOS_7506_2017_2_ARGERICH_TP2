@@ -63,4 +63,4 @@ def ProcesoIterativo(dataFrame, listaNombresCoeficientes):
 	diccionarioCoeficientes = GenerarDiccionarioCoeficientes(dataFrame, listaNombresCoeficientes)
 	for i in range(len(listaNombresCoeficientes)):
 		Iterar(diccionarioCoeficientes)
-	return { k : ExtraerCoeficientes(diccionarioCoeficientes[k], 'coeficiente') for k in diccionarioCoeficientes }
+	return pd.concat([ ExtraerCoeficientes(diccionarioCoeficientes[k], 'coeficiente').assign(varName = pd.Series(k, index = diccionarioCoeficientes[k].index)) for k in diccionarioCoeficientes])

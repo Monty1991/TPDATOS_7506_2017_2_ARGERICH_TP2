@@ -1,8 +1,11 @@
 from .dataFrameUtils import *
 from . import preprocessing
+from . import surfacing
 
 import numpy as np
 import pandas as pd
+
+import json
 
 gIndex = ['state_name', 'barrio', 'property_type']
 
@@ -22,7 +25,7 @@ def CalcularPromedioBarriosAgosto(dataFramePromediosPorBarrios):
 		listaGroups.append(df)
 	return pd.DataFrame(listaGroups)
 
-def ObtenerPrecioPromedioBarrio(dataFrameConsulta, dataFramePromediosPorBarrios):
+def ObtenerPrecioPromedioPorBarrio(dataFrameConsulta, dataFramePromediosPorBarrios):
 	return dataFrameConsulta.merge(dataFramePromediosPorBarrios, how = 'left', left_on = gIndex, right_on = gIndex)
 
 def ObtenerCoeficiente(dataFrameConsulta, dataFrameCoeficientes, coef):
@@ -38,7 +41,12 @@ gDiccionarioReconversionTipoPropiedad = {'casa': 'house', 'ph': 'PH', 'departame
 def ReconvertirTipoPropiedad(valor):
 	return gDiccionarioReconversionTipoPropiedad[valor]
 
-def ResolverConsulta(dataFrameConsulta, dataFrameCoeficientes, dataFramePromediosPorBarrios):
+def ExtraerSuperficie(dataFrameConsulta, dataFramePromediosPorBarrios):
+	promedios = dataFramePromediosPorBarrios[(dataFramePromediosPorBarrios['dump_date_year'] == 2017) & (dataFramePromediosPorBarrios['dump_date_month'] > 1)]
+	promedios = promedios.groupby(by = gIndex)['superficies_promedio'].mean().reset_index(name = 'superficies_promedio')
+	dataFrameConsulta['surface_total_in_m2'].fillna(dataFrameConsulta[gIndex].merge(promedios, how = 'left', left_on = gIndex, right_on = gIndex)['superficies_promedio'], inplace = True)
+
+def PreprocesarConsulta(dataFrameConsulta, dataFramePromediosPorBarrios):
 	preprocessing.PrimeraExpansion(dataFrameConsulta, 'properati-AR-2017-08-01-properties-sell')
 	SacarListaColumnas(dataFrameConsulta, ['properati_url',
 							 'operation',
@@ -55,16 +63,23 @@ def ResolverConsulta(dataFrameConsulta, dataFrameCoeficientes, dataFramePromedio
 							 'country_name',
 							 'created_on',
 							 'created_on_year',
-							 'created_on_month',
-							 'extra'])
+							 'created_on_month'])
 	preprocessing.SegundaExpansion(dataFrameConsulta)
-	preprocessing.SegundaLimpieza(dataFrameConsulta)
+	preprocessing.UniformizarFloors(dataFrameConsulta)
+	preprocessing.UniformizarExpensas(dataFrameConsulta)
 
+	ExtraerSuperficie(dataFrameConsulta, dataFramePromediosPorBarrios)
+	preprocessing.SegundaLimpieza(dataFrameConsulta)
 	#Porque un "gracioso" tradujo los valores
 	dataFrameConsulta['property_type'] = dataFrameConsulta['property_type'].map(ReconvertirTipoPropiedad)
 
+	return dataFrameConsulta
+
+def ResolverConsulta(dataFrameConsulta, dataFrameCoeficientes, dataFramePromediosPorBarrios):
+	dataFrameConsulta = PreprocesarConsulta(dataFrameConsulta, dataFramePromediosPorBarrios)
+
 	dataFramePromediosPorBarrios = CalcularPromedioBarriosAgosto(dataFramePromediosPorBarrios)
-	dataFrameConsulta = ObtenerPrecioPromedioBarrio(dataFrameConsulta, dataFramePromediosPorBarrios)
+	dataFrameConsulta = ObtenerPrecioPromedioPorBarrio(dataFrameConsulta, dataFramePromediosPorBarrios)
 	dataFrameConsulta['coeficiente_global'] = ObtenerCoeficienteGlobal(dataFrameConsulta, dataFrameCoeficientes)
 	dataFrameConsulta['price_usd_per_m2'] = dataFrameConsulta['coeficiente_global'] * dataFrameConsulta['precio_unitario_promedio']
 	dataFrameConsulta['price'] = dataFrameConsulta['surface_total_in_m2'] * dataFrameConsulta['price_usd_per_m2']

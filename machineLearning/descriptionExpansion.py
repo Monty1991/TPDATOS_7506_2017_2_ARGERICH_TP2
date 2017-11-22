@@ -10,10 +10,8 @@
 # pos: Devuelve un diccionario con las claves recibidas y con sus valores inicializados en 0
 # observaciones: De momento, no se distinguen entre null y ausencia del termino
 def Inicializar_Diccionario(claves):
-	diccionario = {}
-	for item in claves:
-		diccionario[item] = 0
-	return diccionario
+	"""Bizarro, pero mas rapido  PEP 274 -- Dict Comprehensions: https://www.python.org/dev/peps/pep-0274/"""
+	return { clave: 0 for clave in claves }
 
 # ------------------------------------------------------------------------------
 # ENCONTRAR FRASE
@@ -53,7 +51,9 @@ gPhrases = [
 	'futbol 5',
 	'seguridad las 24 hs']
 
+#Juntamos todo, mas rapido
 gClaves = gCharacteristics + gPhrases
+
 # ------------------------------------------------------------------------------
 # Parsear Descripcion
 # ------------------------------------------------------------------------------

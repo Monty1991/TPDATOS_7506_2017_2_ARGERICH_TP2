@@ -2,15 +2,22 @@ from .dataFrameUtils import *
 import pandas as pd
 
 #Variables importantes (ejem, constantes)
-gListaColumnasIndiceBarrioPromedios = ['barrio', 'state_name', 'property_type', 'dump_date_year', 'dump_date_month']
+gIndex = ['barrio', 'state_name', 'property_type']
+gListaColumnasIndiceBarrioPromedios = gIndex + ['dump_date_year', 'dump_date_month']
 gNombreColumnaCoeficienteGlobal = 'coeficiente_global'
 gListaNombreColumnasCoeficientes = []
 
-#Precios promedios por barrio y coeficiente global
-def CalculaPrecioUnitarioPromedioPorBarrio(dataFrame):
+#Precios promedios por barrio
+def CalcularPrecioUnitarioPromedioPorBarrio(dataFrame):
 	"""Genera el dataFrame con los precios promedios unitarios de los barrios en el tiempo"""
 	barriosPromedios = dataFrame.groupby(by = gListaColumnasIndiceBarrioPromedios)['price_usd_per_m2'].mean()
 	return barriosPromedios.reset_index(name = 'precio_unitario_promedio')
+
+#Superficies promedios por barrio
+def CalcularSuperficiePromedioPorBarrio(dataFrame):
+	"""Genera el dataFrame con las superficies promedias de los barrios"""
+	barriosPromedios = dataFrame.groupby(by = gListaColumnasIndiceBarrioPromedios)['surface_total_in_m2'].mean()
+	return barriosPromedios.reset_index(name = 'superficies_promedio')
 
 def AgregarPromediosPorBarrios(dataFrame, dataFrameBarriosPromedios):
 	"""Regresa un join del dataFrame con los precios promedios por barrio"""

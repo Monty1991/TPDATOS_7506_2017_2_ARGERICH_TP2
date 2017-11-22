@@ -1,38 +1,35 @@
+import numpy as np
 import pandas as pd
 from .dataFrameUtils import *
 from .filtering import *
-from .descriptionExpansion import Parsear_Descripcion, Inicializar_Diccionario, gClaves
+from .descriptionExpansion import gClaves
+from .expanding import *
 from os import listdir
+import math
+from . import surfacing
 
 #PrimeraExpansion
-def AgregarFechaDeVolcado(dataFrame, archivo):
-	archiveParts = archivo.split('-')
-	dataFrame['dump_date_year'] = pd.Series(int(archiveParts[2]), index = dataFrame.index)
-	dataFrame['dump_date_month'] = pd.Series(int(archiveParts[3]), index = dataFrame.index)
-
-def ExpandirFechaCreacion(dataFrame):
-	dataFrame['created_on_year'] = MapearColumna(dataFrame['created_on'], lambda x: int(x.split('-')[0]))
-	dataFrame['created_on_month'] = MapearColumna(dataFrame['created_on'], lambda x: int(x.split('-')[1]))
-
-def ExpandirBarrioProvinciaYPais(dataFrame):
-	if not 'country_name' in dataFrame:
-		dataFrame['country_name'] = MapearColumna(dataFrame['place_with_parent_names'], lambda x: x.split('|')[1])
-	if not 'state_name' in dataFrame:
-		dataFrame['state_name'] = MapearColumna(dataFrame['place_with_parent_names'], lambda x: x.split('|')[2])
-	dataFrame['barrio'] = MapearColumna(dataFrame['place_with_parent_names'], lambda x: x.split('|')[3])
-
 def PrimeraExpansion(dataFrame, archivo):
-	AgregarFechaDeVolcado(dataFrame, archivo)
 	ExpandirFechaCreacion(dataFrame)
-	ExpandirBarrioProvinciaYPais(dataFrame)
+	ExpandirFechaVolcado(dataFrame, archivo)
+	ExpandirPais(dataFrame)
+	ExpandirProvincia(dataFrame)
+	ExpandirBarrio(dataFrame)
 
 	if 'surface_in_m2' in dataFrame:
 		RenombrarColumna(dataFrame, 'surface_in_m2', 'surface_total_in_m2')
 
+	#Invalidamos superficies nulas
+	dataFrame['surface_total_in_m2'].replace(to_replace = 0, value = np.NaN, inplace = True)
+	#Intentamos obtener el maximo de superficies posibles
+	if 'description' in dataFrame:
+		dataFrame['surface_total_in_m2'].fillna(dataFrame['description'].map(surfacing.GetSurface), inplace = True)
+
 def Filtrar(dataFrame, listaPaises, listaProvincias):
 	dataFrame = FiltrarPais(dataFrame, listaPaises)
 	dataFrame = FiltrarProvincia(dataFrame, listaProvincias)
-	dataFrame = FiltrarBarrioNulo(dataFrame)
+	# La consulta tiene barrios nulos (inserte emoji de furia)
+	#	dataFrame = FiltrarBarrioNulo(dataFrame)
 	dataFrame = FiltrarDiferenciaTemporal(dataFrame, 18)
 	dataFrame = FiltrarPrecioUnitario(dataFrame)
 	return dataFrame
@@ -55,8 +52,7 @@ def EliminarColumnasNoRelevantes(dataFrame):
 								 'id',
 								 'created_on',
 								 'created_on_year',
-								 'created_on_month',
-								 'extra'])
+								 'created_on_month'])
 
 def LimpiarDataFrame(dataFrame):
 	EliminarColumnasNoRelevantes(dataFrame)
@@ -76,29 +72,41 @@ def ControlarConsistenciaPrecio(dataFrame):
 		if ('price_per_m2' in dataFrame) and ('price' in dataFrame):
 			dataFrame['price_usd_per_m2'] = dataFrame[['price', 'surface_total_in_m2', 'price_usd_per_m2']].apply(lambda x: ControlarPrecioUnitario(x[0], x[1], x[2]), axis = 1)
 
-def ExpandirDescripcion(dataFrame):
-	if 'description' in dataFrame:
-		columnaDescription = [Parsear_Descripcion(value) for value in dataFrame['description']]
-	else:
-		columnaDescription = [Inicializar_Diccionario(gClaves) for i in range(0, len(dataFrame.index))]
+def UniformizarFloor(floor):
+	if floor > 999:
+		return 0
+	if floor > 100:
+		return math.floor(floor / 100)
+	return floor
 
-	for k in gClaves:
-		dataFrame[k] = pd.Series([diccionario[k] for diccionario in columnaDescription], index = dataFrame.index)
+def UniformizarFloors(dataFrame):
+	dataFrame['floor'] = dataFrame['floor'].map(UniformizarFloor)
+	dataFrame['floor'].fillna(0, inplace = True)
+
+def UniformizarExpensa(expensa):
+	if type(expensa) == str:
+		return expensa.lstrip('$ ').replace('.-', ' ').split(' ')[0]
+	return expensa
+
+def UniformizarExpensas(dataFrame):
+	dataFrame['expenses'] = dataFrame['expenses'].map(UniformizarExpensa)
+	dataFrame['expenses'].fillna(0, inplace = True)
 
 def SegundaExpansion(dataFrame):
-	"""TODO: completar con los cruces de dataframes, como los cálculos de distancias, y expandir la descripcion"""
+	"""TODO: completar con los cruces de dataframes, como los cálculos de distancias"""
 
-	ExpandirDescripcion(dataFrame)
-	return 2
+	ExpandirDescripcion(dataFrame, gClaves)
 
 def SegundaLimpieza(dataFrame):
-	SacarListaColumnas(dataFrame, ['title', 'description', 'lat', 'lon'])
+	SacarListaColumnas(dataFrame, ['title', 'description', 'extra', 'lat', 'lon'])
 
 def PreprocesarDataFrame(dataFrame, nombreArchivo, listaPaises, listaProvincias):
 	PrimeraExpansion(dataFrame, nombreArchivo)
 	dataFrame = Filtrar(dataFrame, listaPaises, listaProvincias)
 	LimpiarDataFrame(dataFrame)
 	ControlarConsistenciaPrecio(dataFrame)
+	UniformizarFloors(dataFrame)
+	UniformizarExpensas(dataFrame)
 	SegundaExpansion(dataFrame)
 	SegundaLimpieza(dataFrame)
 	return dataFrame

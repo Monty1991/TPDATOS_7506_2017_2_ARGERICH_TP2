@@ -3,14 +3,15 @@ from os import listdir
 
 #Dataframes
 def LeerDataFrame(nombreArchivo):
-    """Función que lee un archivo y devuelve un dataframe"""
-    return pd.read_csv(nombreArchivo, low_memory = False)
+	"""Función que lee un archivo y devuelve un dataframe"""
+	return pd.read_csv(nombreArchivo, low_memory = False)
 
 def ConcatenarDataFrames(listaDataFrames):
 	"""Concatena una lista de dataframes"""
 	return pd.concat(listaDataFrames)
 
 def LeerCarpetaDataFrames(rutaCarpeta):
+	"""Lee todos los dataframes de una carpeta y los devuelve como un unico dataframe"""
 	listaDataFrames = []
 	for archive in listdir(rutaCarpeta):
 		if ".csv" in archive:
@@ -35,16 +36,14 @@ def MapearColumna(columna, function):
 def RenombrarColumna(dataFrame, nombreViejo, nombreNuevo):
 	"""Cambia de nombre una columna. Si el nuevo nombre ya está usado, no hace nada"""
 	if not nombreNuevo in dataFrame:
-		dataFrame[nombreNuevo] = dataFrame[nombreViejo]
-		SacarColumna(dataFrame, nombreViejo)
+		if nombreViejo in dataFrame:
+			dataFrame[nombreNuevo] = dataFrame[nombreViejo]
+			SacarColumna(dataFrame, nombreViejo)
 
 def SacarColumna(dataFrame, nombreColumna):
-    """Quita una columna de un dataframe. Si no existe, no hace nada"""
-    if nombreColumna in dataFrame:
-        dataFrame.drop(nombreColumna, axis = 1, inplace = True)
+	"""Quita una columna de un dataframe"""
+	dataFrame.drop(nombreColumna, axis = 1, inplace = True, errors = 'ignore')
 
 def SacarListaColumnas(dataFrame, listaNombreColumna):
-    """Quita una lista de columnas de un dataframe"""
-    for nombreColumna in listaNombreColumna:
-        SacarColumna(dataFrame, nombreColumna)
-
+	"""Quita una lista de columnas de un dataframe"""
+	dataFrame.drop(listaNombreColumna, axis = 1, inplace = True, errors = 'ignore')

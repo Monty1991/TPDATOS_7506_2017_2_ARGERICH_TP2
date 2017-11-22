@@ -37,14 +37,17 @@ def ObtenerCoeficienteGlobal(dataFrameConsulta, dataFrameCoeficientes):
 		coeficiente_global *= ObtenerCoeficiente(dataFrameConsulta, dataFrameCoeficientes, coef)
 	return coeficiente_global
 
-gDiccionarioReconversionTipoPropiedad = {'casa': 'house', 'ph': 'PH', 'departamento': 'apartment', 'tienda': 'store'}
+gDiccionarioReconversionTipoPropiedad = {'casa': 'house', 'ph': 'PH', 'departamento': 'apartment', 'tienda': 'store', 'house': 'house', 'PH': 'PH', 'apartment': 'apartment', 'store': 'store'}
 def ReconvertirTipoPropiedad(valor):
 	return gDiccionarioReconversionTipoPropiedad[valor]
 
 def ExtraerSuperficie(dataFrameConsulta, dataFramePromediosPorBarrios):
 	promedios = dataFramePromediosPorBarrios[(dataFramePromediosPorBarrios['dump_date_year'] == 2017) & (dataFramePromediosPorBarrios['dump_date_month'] > 1)]
 	promedios = promedios.groupby(by = gIndex)['superficies_promedio'].mean().reset_index(name = 'superficies_promedio')
-	dataFrameConsulta['surface_total_in_m2'].fillna(dataFrameConsulta[gIndex].merge(promedios, how = 'left', left_on = gIndex, right_on = gIndex)['superficies_promedio'], inplace = True)
+
+	df = dataFrameConsulta.merge(promedios, how = 'left', left_on = gIndex, right_on = gIndex)
+	dataFrameConsulta['superficies_promedio'] = df['superficies_promedio']
+	dataFrameConsulta['surface_total_in_m2'].fillna(dataFrameConsulta['superficies_promedio'], inplace = True)
 
 def PreprocesarConsulta(dataFrameConsulta, dataFramePromediosPorBarrios):
 	preprocessing.PrimeraExpansion(dataFrameConsulta, 'properati-AR-2017-08-01-properties-sell')
@@ -68,10 +71,11 @@ def PreprocesarConsulta(dataFrameConsulta, dataFramePromediosPorBarrios):
 	preprocessing.UniformizarFloors(dataFrameConsulta)
 	preprocessing.UniformizarExpensas(dataFrameConsulta)
 
-	ExtraerSuperficie(dataFrameConsulta, dataFramePromediosPorBarrios)
 	preprocessing.SegundaLimpieza(dataFrameConsulta)
 	#Porque un "gracioso" tradujo los valores
 	dataFrameConsulta['property_type'] = dataFrameConsulta['property_type'].map(ReconvertirTipoPropiedad)
+
+	ExtraerSuperficie(dataFrameConsulta, dataFramePromediosPorBarrios)
 
 	return dataFrameConsulta
 

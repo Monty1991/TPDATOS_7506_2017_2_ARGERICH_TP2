@@ -18,8 +18,15 @@ def ExpandirProvincia(dataFrame):
 	if not 'state_name' in dataFrame:
 		dataFrame['state_name'] = MapearColumna(dataFrame['place_with_parent_names'], lambda x: x.split('|')[2])
 
+def GetBarrio(full_place_name):
+	partes = full_place_name.split('|')
+	barrio = partes[3]
+	if (barrio != ''):
+		return barrio
+	return partes[2]
+
 def ExpandirBarrio(dataFrame):
-	dataFrame['barrio'] = MapearColumna(dataFrame['place_with_parent_names'], lambda x: x.split('|')[3])
+	dataFrame['barrio'] = MapearColumna(dataFrame['place_with_parent_names'], GetBarrio)
 
 def ExpandirDescripcion(dataFrame, claves):
 	if 'description' in dataFrame:

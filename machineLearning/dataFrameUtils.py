@@ -1,23 +1,5 @@
 import pandas as pd
 from os import listdir
-import math
-
-#MapReduce
-def Map(columna, funcion):
-	"""Es un map sobre arreglos que devuelve otro arreglo. Similar a Spark"""
-	return [funcion(x) for x in columna]
-
-def Reduce(columna, funcion, default):
-	"""Es un reduce sobre un arreglo que devuelve un valor. Similar a Spark"""
-	size = len(columna)
-	if size == 0:
-		return default
-	if size < 2:
-		return columna[0]
-	if size == 2:
-		return funcion(columna[0], columna[1])
-	mitad = int(math.floor(size / 2))
-	return funcion(Reduce(columna[0:mitad+1], funcion, default), Reduce(columna[mitad + 1:], funcion, default))
 
 #Dataframes
 def LeerDataFrame(nombreArchivo):

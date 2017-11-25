@@ -1,5 +1,6 @@
+from .utils import *
 from .dataFrameUtils import *
-from .descriptionExpansion import Parsear_Descripcion, Inicializar_Diccionario
+from .descriptionExpansion import ParsearDescripcion, InicializarDiccionario
 
 def ExpandirFechaCreacion(dataFrame):
 	dataFrame['created_on_year'] = MapearColumna(dataFrame['created_on'], lambda x: int(x.split('-')[0]))
@@ -30,9 +31,9 @@ def ExpandirBarrio(dataFrame):
 
 def ExpandirDescripcion(dataFrame, claves):
 	if 'description' in dataFrame:
-		columnaDescription = [Parsear_Descripcion(value) for value in dataFrame['description']]
+		columnaDescription = Map(dataFrame['description'].values, ParsearDescripcion)
 	else:
-		diccionario = Inicializar_Diccionario(claves)
+		diccionario = InicializarDiccionario(claves)
 		columnaDescription = [diccionario for i in range(0, len(dataFrame.index))]
 
 	for k in claves:

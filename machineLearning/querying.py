@@ -1,6 +1,6 @@
 from .dataFrameUtils import *
 from . import preprocessing
-from . import surfacing
+from . import extract_surface
 
 import numpy as np
 import pandas as pd
@@ -51,6 +51,9 @@ def ExtraerSuperficie(dataFrameConsulta, dataFramePromediosPorBarrios):
 
 def PreprocesarConsulta(dataFrameConsulta, dataFramePromediosPorBarrios):
 	preprocessing.PrimeraExpansion(dataFrameConsulta, 'properati-AR-2017-08-01-properties-sell')
+	#Porque un "gracioso" tradujo los valores
+	dataFrameConsulta['property_type'] = dataFrameConsulta['property_type'].map(ReconvertirTipoPropiedad)
+
 	SacarListaColumnas(dataFrameConsulta, ['properati_url',
 							 'operation',
 							 'geonames_id',
@@ -67,13 +70,12 @@ def PreprocesarConsulta(dataFrameConsulta, dataFramePromediosPorBarrios):
 							 'created_on',
 							 'created_on_year',
 							 'created_on_month'])
+
 	preprocessing.SegundaExpansion(dataFrameConsulta)
 	preprocessing.UniformizarFloors(dataFrameConsulta)
 	preprocessing.UniformizarExpensas(dataFrameConsulta)
 
 	preprocessing.SegundaLimpieza(dataFrameConsulta)
-	#Porque un "gracioso" tradujo los valores
-	dataFrameConsulta['property_type'] = dataFrameConsulta['property_type'].map(ReconvertirTipoPropiedad)
 
 	ExtraerSuperficie(dataFrameConsulta, dataFramePromediosPorBarrios)
 
@@ -86,5 +88,5 @@ def ResolverConsulta(dataFrameConsulta, dataFrameCoeficientes, dataFramePromedio
 	dataFrameConsulta = ObtenerPrecioPromedioPorBarrio(dataFrameConsulta, dataFramePromediosPorBarrios)
 	dataFrameConsulta['coeficiente_global'] = ObtenerCoeficienteGlobal(dataFrameConsulta, dataFrameCoeficientes)
 	dataFrameConsulta['price_usd_per_m2'] = dataFrameConsulta['coeficiente_global'] * dataFrameConsulta['precio_unitario_promedio']
-	dataFrameConsulta['price'] = dataFrameConsulta['surface_total_in_m2'] * dataFrameConsulta['price_usd_per_m2']
-	return dataFrameConsulta[['id', 'price']]
+	dataFrameConsulta['price_usd'] = dataFrameConsulta['surface_total_in_m2'] * dataFrameConsulta['price_usd_per_m2']
+	return dataFrameConsulta[['id', 'price_usd']]

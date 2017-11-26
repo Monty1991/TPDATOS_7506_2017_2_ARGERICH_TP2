@@ -82,11 +82,11 @@ def ObtenerMenorDistancia(state_name, barrio, lat, lon, dataFrameACruzar):
 def CruzarDataFrame(dataFrame, dataFrameACruzar, nombreCampo):
 	dataFrame[nombreCampo] = dataFrame[['state_name', 'barrio', 'lat', 'lon']].apply(lambda x: ObtenerMenorDistancia(x[0], x[1], x[2], x[3], dataFrameACruzar), axis = 1)
 
-def CruzarDataFrames(dataFrame, carpetaDataframes):
+def CruzarDataFrames(dataFrame, rutaCarpetaDataFramesCoordenadas):
 	listaCamposExtras = []
-	for archive in listdir(carpetaDataframes):
+	for archive in listdir(rutaCarpetaDataFramesCoordenadas):
 		if '.csv' in archive:
-			df = LeerDataFrame(carpetaDataframes + archive)
+			df = LeerDataFrame(rutaCarpetaDataFramesCoordenadas + archive)
 			campoExtra = archive.replace('.csv', '')
 			listaCamposExtras.append(campoExtra)
 			CruzarDataFrame(dataFrame, df, campoExtra)

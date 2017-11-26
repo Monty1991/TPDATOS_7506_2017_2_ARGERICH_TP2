@@ -29,7 +29,9 @@ def ActualizarNuevoCoeficiente(diccionarioCoeficientes, nombreCoeficiente):
 	coeficienteDF = diccionarioCoeficientes[nombreCoeficiente]
 	SacarColumna(coeficienteDF, 'coeficiente')
 	coeficiente = CalcularNuevoCoeficiente(diccionarioCoeficientes, nombreCoeficiente)
-	diccionarioCoeficientes[nombreCoeficiente] = coeficienteDF.merge(coeficiente, left_on = ['property_type', 'variable'], right_on = ['property_type', 'variable'], how = 'left')
+	coeficienteDF = coeficienteDF.merge(coeficiente, left_on = ['property_type', 'variable'], right_on = ['property_type', 'variable'], how = 'left')
+	coeficienteDF['coeficiente'].fillna(1, inplace = True)
+	diccionarioCoeficientes[nombreCoeficiente] = coeficienteDF
 
 def ExtraerCoeficientes(coeficienteDF, column):
 	"""Obtiene un dataFrame con los coeficientes"""
@@ -40,4 +42,5 @@ def Iterar(diccionarioCoeficientes):
 		ActualizarNuevoCoeficiente(diccionarioCoeficientes, k)
 
 def CalcularMaximoIteraciones(cantidadCoeficientes):
-	return int(math.ceil(math.sqrt(cantidadCoeficientes)))
+	#return int(math.ceil(math.sqrt(cantidadCoeficientes)))
+	return cantidadCoeficientes

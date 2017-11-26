@@ -3,6 +3,7 @@ from . import preprocessing
 from . import extract_surface
 from . import processing
 from . import expanding
+from .descriptionExpansion import gClaves
 
 import numpy as np
 import pandas as pd
@@ -65,6 +66,7 @@ def PreprocesarConsulta(dataFrameConsulta, dataFrameMedianasPorBarrios):
 	processing.ParametrizarExpensasUltimoMomento(dataFrameConsulta)
 
 	ExtraerSuperficie(dataFrameConsulta, dataFrameMedianasPorBarrios)
+	expanding.ExpandirDescripcion(dataFrameConsulta, gClaves)
 
 	return dataFrameConsulta
 

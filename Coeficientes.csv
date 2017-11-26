@@ -1,0 +1,258 @@
+property_type,variable,coeficiente,varName
+PH,1.0,1.6616376624593043,rooms
+PH,2.0,1.7018621190409489,rooms
+PH,3.0,1.277758250265021,rooms
+PH,4.0,1.077487152064382,rooms
+PH,5.0,1.0724538681323639,rooms
+PH,6.0,0.9641069367286423,rooms
+PH,7.0,0.9951817435405,rooms
+PH,8.0,0.9327985297028342,rooms
+PH,9.0,0.7803501311212038,rooms
+PH,10.0,0.9312969523283315,rooms
+PH,12.0,0.8468732865127739,rooms
+PH,14.0,0.8027468086265017,rooms
+PH,15.0,0.5353580561863139,rooms
+apartment,1.0,2.1386202310931672,rooms
+apartment,2.0,1.9737781300165862,rooms
+apartment,3.0,1.568164267701154,rooms
+apartment,4.0,1.3699639836570243,rooms
+apartment,5.0,1.2440509935693103,rooms
+apartment,6.0,1.2442726525086993,rooms
+apartment,7.0,1.1983799748035806,rooms
+apartment,8.0,1.1195266749692667,rooms
+apartment,9.0,0.9304829940427892,rooms
+apartment,10.0,1.022530276559765,rooms
+apartment,11.0,0.6489473282511049,rooms
+apartment,12.0,2.350320554696072,rooms
+apartment,14.0,0.8223087208388731,rooms
+house,0.0,1.0930120486378856,rooms
+house,1.0,1.3462508283431331,rooms
+house,2.0,1.9169447398890433,rooms
+house,3.0,1.5378161542219184,rooms
+house,4.0,1.4383936528172183,rooms
+house,5.0,1.4514350121749129,rooms
+house,6.0,1.4757097018664418,rooms
+house,7.0,1.5295584678796905,rooms
+house,8.0,1.936031959501604,rooms
+house,9.0,1.6836744569199042,rooms
+house,10.0,1.2206877879885034,rooms
+house,11.0,1.470687085599476,rooms
+house,12.0,1.932633375565275,rooms
+house,13.0,0.7137395403286627,rooms
+house,14.0,2.2939411705303674,rooms
+house,15.0,10.10553208374522,rooms
+house,16.0,2.5099685713376205,rooms
+house,18.0,15.532311311181425,rooms
+store,1.0,1.4195345874510232,rooms
+store,2.0,1.4343418641289087,rooms
+store,3.0,1.0844228220172114,rooms
+store,4.0,1.0401291587665122,rooms
+store,5.0,1.0903183504279288,rooms
+store,6.0,0.7480109963953098,rooms
+store,7.0,0.8663547544192596,rooms
+store,8.0,1.101090025630903,rooms
+store,9.0,0.485543934715084,rooms
+store,10.0,1.1282484416142033,rooms
+store,11.0,0.7413984853633782,rooms
+store,15.0,1.426072065408063,rooms
+store,16.0,0.5356258287415305,rooms
+PH,0.0,0.9004398135307138,Estaciones de Ferrocarril
+PH,1.0,1.0937700822317098,Estaciones de Ferrocarril
+PH,2.0,0.9631232996677733,Estaciones de Ferrocarril
+PH,3.0,1.0106447790012907,Estaciones de Ferrocarril
+PH,4.0,0.7900181760001339,Estaciones de Ferrocarril
+PH,5.0,0.9519148906024578,Estaciones de Ferrocarril
+apartment,0.0,0.9423072273732632,Estaciones de Ferrocarril
+apartment,1.0,1.08673386408049,Estaciones de Ferrocarril
+apartment,2.0,0.9476364772907044,Estaciones de Ferrocarril
+apartment,3.0,0.9149538634177989,Estaciones de Ferrocarril
+apartment,4.0,0.947860832514039,Estaciones de Ferrocarril
+apartment,5.0,0.9389684805104972,Estaciones de Ferrocarril
+house,0.0,1.0225157486826588,Estaciones de Ferrocarril
+house,1.0,0.9973042278968862,Estaciones de Ferrocarril
+house,2.0,0.9214485381487019,Estaciones de Ferrocarril
+house,3.0,0.7636760237481449,Estaciones de Ferrocarril
+house,4.0,0.9426614127987016,Estaciones de Ferrocarril
+house,5.0,1.1365021400620923,Estaciones de Ferrocarril
+store,0.0,0.9803681105341479,Estaciones de Ferrocarril
+store,1.0,1.0215214305096167,Estaciones de Ferrocarril
+store,2.0,0.9546268888557267,Estaciones de Ferrocarril
+store,3.0,0.9605030584241677,Estaciones de Ferrocarril
+store,4.0,1.1033886203593979,Estaciones de Ferrocarril
+store,5.0,1.0213151697696479,Estaciones de Ferrocarril
+PH,0.0,0.8734245102005704,Estaciones de Policia
+PH,1.0,0.8959229123824469,Estaciones de Policia
+PH,2.0,0.805080296103426,Estaciones de Policia
+PH,3.0,0.830760815504773,Estaciones de Policia
+PH,4.0,0.7313560326989629,Estaciones de Policia
+PH,5.0,1.0584624570902847,Estaciones de Policia
+apartment,0.0,1.0590543817970697,Estaciones de Policia
+apartment,1.0,0.9663873442617185,Estaciones de Policia
+apartment,2.0,0.9148448401196604,Estaciones de Policia
+apartment,3.0,1.1907733913209817,Estaciones de Policia
+apartment,4.0,1.0618264418744052,Estaciones de Policia
+apartment,5.0,0.9650306507048971,Estaciones de Policia
+house,0.0,0.9069492912885062,Estaciones de Policia
+house,1.0,0.9161643828754801,Estaciones de Policia
+house,2.0,0.8822289943212269,Estaciones de Policia
+house,3.0,0.7944893499724114,Estaciones de Policia
+house,4.0,0.8474958586492749,Estaciones de Policia
+house,5.0,1.027713413085831,Estaciones de Policia
+store,0.0,0.9288436963329715,Estaciones de Policia
+store,1.0,0.9458532231595813,Estaciones de Policia
+store,2.0,0.7659878998475481,Estaciones de Policia
+store,3.0,0.8851623011625106,Estaciones de Policia
+store,4.0,0.9361817016277048,Estaciones de Policia
+store,5.0,0.5675236363317042,Estaciones de Policia
+PH,0.0,1.0742029358489888,Estaciones de Subte
+PH,1.0,1.0606667814672162,Estaciones de Subte
+PH,2.0,1.2338821563953402,Estaciones de Subte
+PH,3.0,1.1177226641209475,Estaciones de Subte
+PH,4.0,1.203469566249497,Estaciones de Subte
+PH,5.0,1.0555631736958624,Estaciones de Subte
+apartment,0.0,0.8925505816014847,Estaciones de Subte
+apartment,1.0,0.8838217214953816,Estaciones de Subte
+apartment,2.0,0.9660134382937519,Estaciones de Subte
+apartment,3.0,1.1668650736245827,Estaciones de Subte
+apartment,4.0,1.0382155950710725,Estaciones de Subte
+apartment,5.0,0.8636592947601083,Estaciones de Subte
+house,0.0,1.2370556175101226,Estaciones de Subte
+house,1.0,1.104974115808529,Estaciones de Subte
+house,2.0,1.1153895999492955,Estaciones de Subte
+house,3.0,1.0708289687251737,Estaciones de Subte
+house,4.0,2.6723428309924637,Estaciones de Subte
+house,5.0,1.0879730650950246,Estaciones de Subte
+store,0.0,0.990087068154378,Estaciones de Subte
+store,1.0,0.8908587189650577,Estaciones de Subte
+store,2.0,0.9677404850029051,Estaciones de Subte
+store,3.0,1.058547962690527,Estaciones de Subte
+store,4.0,0.9700286689567994,Estaciones de Subte
+store,5.0,0.8096854662124261,Estaciones de Subte
+PH,0.0,0.6680752784761809,Estaciones Premetro
+PH,1.0,0.7358487621533949,Estaciones Premetro
+PH,2.0,0.80684659759715,Estaciones Premetro
+PH,3.0,0.6852097545034284,Estaciones Premetro
+PH,4.0,1.0695250170472261,Estaciones Premetro
+PH,5.0,0.9411760202327633,Estaciones Premetro
+apartment,0.0,1.1022602301998228,Estaciones Premetro
+apartment,1.0,0.8482068514476852,Estaciones Premetro
+apartment,2.0,0.9569354758423307,Estaciones Premetro
+apartment,3.0,2.2639807445393916,Estaciones Premetro
+apartment,4.0,0.6378803026555036,Estaciones Premetro
+apartment,5.0,1.085414624556392,Estaciones Premetro
+house,0.0,0.9642574862952528,Estaciones Premetro
+house,1.0,0.8382276362095118,Estaciones Premetro
+house,2.0,2.4103557656244634,Estaciones Premetro
+house,3.0,1.0318078632238263,Estaciones Premetro
+house,4.0,1.1911828738967638,Estaciones Premetro
+house,5.0,1.2510796631566234,Estaciones Premetro
+store,0.0,0.37693160663756203,Estaciones Premetro
+store,1.0,1.0505450722143659,Estaciones Premetro
+store,2.0,0.9726868796398899,Estaciones Premetro
+store,3.0,0.9138767975578453,Estaciones Premetro
+store,4.0,2.094528987359364,Estaciones Premetro
+store,5.0,2.221528337942885,Estaciones Premetro
+PH,0.0,1.0757684244294716,Hospitales
+PH,1.0,1.2098161344301246,Hospitales
+PH,2.0,1.166817805045023,Hospitales
+PH,3.0,1.391426588014926,Hospitales
+PH,4.0,1.2588195014973258,Hospitales
+PH,5.0,1.220777411344914,Hospitales
+apartment,0.0,0.9680211585469093,Hospitales
+apartment,1.0,1.1000990645989701,Hospitales
+apartment,2.0,0.9467840113498127,Hospitales
+apartment,3.0,0.881269121550453,Hospitales
+apartment,4.0,1.0158787226020165,Hospitales
+apartment,5.0,0.9435577956568306,Hospitales
+house,0.0,1.0470491934784218,Hospitales
+house,1.0,1.1485384626100572,Hospitales
+house,2.0,1.165368185903669,Hospitales
+house,3.0,1.354224215998236,Hospitales
+house,4.0,1.0302410230974228,Hospitales
+house,5.0,0.9277914701226512,Hospitales
+store,0.0,0.9827381905734814,Hospitales
+store,1.0,0.9158882013829752,Hospitales
+store,2.0,0.9104803101733677,Hospitales
+store,3.0,1.0984881042820647,Hospitales
+store,4.0,0.7798383131607175,Hospitales
+store,5.0,0.7268052773594337,Hospitales
+PH,0.0,1.022785221053211,living
+PH,1.0,0.8497973835440565,living
+apartment,0.0,1.0641524663977668,living
+apartment,1.0,0.8827501740306712,living
+house,0.0,1.0277577401887106,living
+house,1.0,0.9346146190091018,living
+store,0.0,1.05845573347956,living
+store,1.0,0.866836227360409,living
+PH,0.0,1.0069223216559413,cochera
+PH,1.0,0.8779249362681688,cochera
+apartment,0.0,1.0120108187270977,cochera
+apartment,1.0,0.9079521280810419,cochera
+house,0.0,0.9918325018950657,cochera
+house,1.0,1.0659456062580641,cochera
+store,0.0,0.9971381436043347,cochera
+store,1.0,1.0948143945551903,cochera
+PH,0.0,1.0234344479989557,comedor
+PH,1.0,0.9261430703700126,comedor
+apartment,0.0,1.0257131343317638,comedor
+apartment,1.0,0.8804622929344003,comedor
+house,0.0,1.0455478126951425,comedor
+house,1.0,0.9316200731339003,comedor
+store,0.0,1.0091458302925185,comedor
+store,1.0,0.7650340875859449,comedor
+PH,0.0,0.9969830472640094,pileta
+PH,1.0,1.2277101773643757,pileta
+apartment,0.0,0.9950429515536349,pileta
+apartment,1.0,1.0933762654452102,pileta
+house,0.0,1.0033110280088025,pileta
+house,1.0,0.9824757732710333,pileta
+store,0.0,0.998299789022183,pileta
+store,1.0,1.1665848438889472,pileta
+PH,0.0,1.0005824326413175,piscina
+PH,1.0,0.756296005701586,piscina
+apartment,0.0,0.988857206626752,piscina
+apartment,1.0,1.2547215260203155,piscina
+house,0.0,0.9996328607782854,piscina
+house,1.0,1.0064779880805301,piscina
+store,0.0,0.9959818158086611,piscina
+store,1.0,2.118533596283667,piscina
+PH,0.0,0.7704104346021758,cancha de tenis
+PH,1.0,1.2379732080719978,cancha de tenis
+apartment,0.0,1.1091377959817412,cancha de tenis
+apartment,1.0,0.9116997857354195,cancha de tenis
+house,0.0,1.06123428676251,cancha de tenis
+house,1.0,0.9701560048642601,cancha de tenis
+store,0.0,1.0181773290092362,cancha de tenis
+store,1.0,0.9961273291529432,cancha de tenis
+PH,0.0,1.015809131518569,club house
+PH,1.0,0.9152832584533142,club house
+apartment,0.0,0.9610522473660235,club house
+apartment,1.0,1.1502711071879799,club house
+house,0.0,0.9877516277495101,club house
+house,1.0,1.034689718171323,club house
+store,0.0,1.0224105964298313,club house
+store,1.0,0.9564421331823413,club house
+PH,0.0,1.0516383567737873,sector de juegos infantiles
+PH,1.0,0.7618708761474758,sector de juegos infantiles
+apartment,0.0,0.9942899329658994,sector de juegos infantiles
+apartment,1.0,1.0280636444251439,sector de juegos infantiles
+house,0.0,0.9920554211711945,sector de juegos infantiles
+house,1.0,1.0339284743814448,sector de juegos infantiles
+store,0.0,1.0041504724834096,sector de juegos infantiles
+store,1.0,0.9848014068775963,sector de juegos infantiles
+PH,0.0,1.0065489589611742,futbol 5
+PH,1.0,0.8873507520587415,futbol 5
+apartment,0.0,0.9880742308089373,futbol 5
+apartment,1.0,1.2737394635133317,futbol 5
+house,0.0,1.0051822987871994,futbol 5
+house,1.0,0.9383174017086046,futbol 5
+store,0.0,1.0073607966504239,futbol 5
+store,1.0,0.9061281283217637,futbol 5
+PH,0.0,1.1207372014410728,seguridad las 24 hs
+PH,1.0,0.8461794143988426,seguridad las 24 hs
+apartment,0.0,0.9502383429671614,seguridad las 24 hs
+apartment,1.0,1.069939062189026,seguridad las 24 hs
+house,0.0,0.9847343656005961,seguridad las 24 hs
+house,1.0,1.0137417117353735,seguridad las 24 hs
+store,0.0,1.0103767098752223,seguridad las 24 hs
+store,1.0,0.992399806893895,seguridad las 24 hs
